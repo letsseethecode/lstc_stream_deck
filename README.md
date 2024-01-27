@@ -1,24 +1,34 @@
-# Stream Deck
+lstc-stream-deck
+================
 
-An ARDUINO project that turns microswitches into keyboard keys, so that they can be used as a stream deck.
+Rust project for the _Arduino Uno_.
 
-## Circuit Design
+## Build Instructions
+1. Install prerequisites as described in the [`avr-hal` README] (`avr-gcc`, `avr-libc`, `avrdude`, [`ravedude`]).
 
-This design can be found on [tinkercad.com](https://www.tinkercad.com/things/iYXxymdymQ0-stream-deck).
+2. Run `cargo build` to build the firmware.
 
-![Circuit Layout](./docs/images/circuit_design.png)
+3. Run `cargo run` to flash the firmware to a connected board.  If `ravedude`
+   fails to detect your board, check its documentation at
+   <https://crates.io/crates/ravedude>.
 
-Component:
+4. `ravedude` will open a console session after flashing where you can interact
+   with the UART console of your board.
 
-1. Breadboard
-1. Arduino UNO R3
-1. 5x microswitch
-1. 5x 10KΩ resisters
-1. 1x Potentiometer
+[`avr-hal` README]: https://github.com/Rahix/avr-hal#readme
+[`ravedude`]: https://crates.io/crates/ravedude
 
-All of the components above can be found in this kit:
-https://www.amazon.co.uk/gp/product/B01IUY62RM/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1
+## License
+Licensed under either of
 
-## Software Design
+ - Apache License, Version 2.0
+   ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
+ - MIT license
+   ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
 
-No idea.  Figure it out. :D
+at your option.
+
+## Contribution
+Unless you explicitly state otherwise, any contribution intentionally submitted
+for inclusion in the work by you, as defined in the Apache-2.0 license, shall
+be dual licensed as above, without any additional terms or conditions.
