@@ -8,37 +8,37 @@ use arduino_hal::{
 use panic_halt as _;
 
 trait Morse {
-    fn dot(&mut self);
-    fn dash(&mut self);
+    fn dit(&mut self);
+    fn dah(&mut self);
     fn space(&mut self);
     fn separate(&self);
     fn end(&self);
 }
 
-const DOT: u16 = 150;
-const DASH: u16 = DOT * 3;
-const GAP: u16 = DOT;
-const SEP: u16 = DOT * 3;
-const SPACE: u16 = DOT * 3;
+const DIT: u16 = 150;
+const DAH: u16 = DIT * 3;
+const GAP: u16 = DIT;
+const SEP: u16 = DIT * 3;
+const SPC: u16 = DIT * 3;
 const END: u16 = 1000;
 
 impl Morse for Pin<Output, PB5> {
-    fn dot(&mut self) {
+    fn dit(&mut self) {
         self.set_high();
-        arduino_hal::delay_ms(DOT);
+        arduino_hal::delay_ms(DIT);
         self.set_low();
         arduino_hal::delay_ms(GAP);
     }
 
-    fn dash(&mut self) {
+    fn dah(&mut self) {
         self.set_high();
-        arduino_hal::delay_ms(DASH);
+        arduino_hal::delay_ms(DAH);
         self.set_low();
         arduino_hal::delay_ms(GAP);
     }
 
     fn space(&mut self) {
-        arduino_hal::delay_ms(SPACE);
+        arduino_hal::delay_ms(SPC);
     }
 
     fn separate(&self) {
@@ -99,8 +99,8 @@ fn main() -> ! {
             let morse = convert_char(c);
             for d in morse.chars() {
                 match d {
-                    '.' => led.dot(),
-                    '-' => led.dash(),
+                    '.' => led.dit(),
+                    '-' => led.dah(),
                     _ => led.space(),
                 }
             }
