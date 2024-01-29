@@ -1,27 +1,109 @@
 #![no_std]
 #![no_main]
 
+use arduino_hal::{
+    hal::port::PB5,
+    port::{mode::Output, Pin},
+};
 use panic_halt as _;
+
+trait Morse {
+    fn dot(&mut self);
+    fn dash(&mut self);
+    fn space(&mut self);
+    fn separate(&self);
+    fn end(&self);
+}
+
+const DOT: u16 = 100;
+const DASH: u16 = DOT * 4;
+const GAP: u16 = DOT;
+const SEP: u16 = DOT * 2;
+const SPACE: u16 = DOT * 4;
+const END: u16 = 1000;
+
+impl Morse for Pin<Output, PB5> {
+    fn dot(&mut self) {
+        self.set_high();
+        arduino_hal::delay_ms(DOT);
+        self.set_low();
+        arduino_hal::delay_ms(GAP);
+    }
+
+    fn dash(&mut self) {
+        self.set_high();
+        arduino_hal::delay_ms(DASH);
+        self.set_low();
+        arduino_hal::delay_ms(GAP);
+    }
+
+    fn space(&mut self) {
+        arduino_hal::delay_ms(SPACE);
+    }
+
+    fn separate(&self) {
+        arduino_hal::delay_ms(SEP);
+    }
+
+    fn end(&self) {
+        arduino_hal::delay_ms(END);
+    }
+}
+
+fn convert_char(c: char) -> &'static str {
+    match c {
+        'A' => ".-",
+        'B' => "-...",
+        'C' => "-.-.",
+        'D' => "-..",
+        'E' => ".",
+        'F' => "..-.",
+        'G' => "--.",
+        'H' => "....",
+        'I' => "..",
+        'J' => ".---",
+        'K' => "-.-",
+        'L' => ".-..",
+        'M' => "--",
+        'N' => "-.",
+        'O' => "---",
+        'P' => ".--.",
+        'Q' => "--.-",
+        'R' => ".-.",
+        'S' => "...",
+        'T' => "-",
+        'U' => "..-",
+        'V' => "...-",
+        'W' => ".--",
+        'X' => "-..-",
+        'Y' => "-.--",
+        'Z' => "--..",
+        _ => " ",
+    }
+}
 
 #[arduino_hal::entry]
 fn main() -> ! {
     let dp = arduino_hal::Peripherals::take().unwrap();
     let pins = arduino_hal::pins!(dp);
 
-    /*
-     * For examples (and inspiration), head to
-     *
-     *     https://github.com/Rahix/avr-hal/tree/main/examples
-     *
-     * NOTE: Not all examples were ported to all boards!  There is a good chance though, that code
-     * for a different board can be adapted for yours.  The Arduino Uno currently has the most
-     * examples available.
-     */
-
     let mut led = pins.d13.into_output();
 
+    let message = "THIS IS A LONGER MESSAGE";
+    // - .... .. ... / .. ... / .- / .-.. --- -. --. . .-. / -- . ... ... .- --. .
+
     loop {
-        led.toggle();
-        arduino_hal::delay_ms(1000);
+        for c in message.chars() {
+            let morse = convert_char(c);
+            for m in morse.chars() {
+                match m {
+                    '.' => led.dot(),
+                    '-' => led.dash(),
+                    _ => led.space(),
+                }
+            }
+            led.separate();
+        }
+        led.end();
     }
 }
