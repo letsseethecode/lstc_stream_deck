@@ -15,11 +15,11 @@ trait Morse {
     fn end(&self);
 }
 
-const DOT: u16 = 100;
-const DASH: u16 = DOT * 4;
+const DOT: u16 = 150;
+const DASH: u16 = DOT * 3;
 const GAP: u16 = DOT;
-const SEP: u16 = DOT * 2;
-const SPACE: u16 = DOT * 4;
+const SEP: u16 = DOT * 3;
+const SPACE: u16 = DOT * 3;
 const END: u16 = 1000;
 
 impl Morse for Pin<Output, PB5> {
@@ -86,17 +86,19 @@ fn convert_char(c: char) -> &'static str {
 fn main() -> ! {
     let dp = arduino_hal::Peripherals::take().unwrap();
     let pins = arduino_hal::pins!(dp);
-
     let mut led = pins.d13.into_output();
 
-    let message = "THIS IS A LONGER MESSAGE";
+    let message = "SOS";
+    // ... --- ...
+
+    // let message = "THIS IS A LONGER MESSAGE";
     // - .... .. ... / .. ... / .- / .-.. --- -. --. . .-. / -- . ... ... .- --. .
 
     loop {
         for c in message.chars() {
             let morse = convert_char(c);
-            for m in morse.chars() {
-                match m {
+            for d in morse.chars() {
+                match d {
                     '.' => led.dot(),
                     '-' => led.dash(),
                     _ => led.space(),
