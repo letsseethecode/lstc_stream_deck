@@ -50,6 +50,12 @@ or to specify the port you can use:
 RAVEDUDE_PORT=/dev/<usb_port> cargo run
 ```
 
+## ARDUINO IDE
+
+You can download the Arduino IDE from here: https://www.arduino.cc/en/software
+
+We will be using Rust, so the only use we have for the IDE is when reading examples and it's also a handy way to reset the device.
+
 ## Software Design
 
 No idea.  Figure it out. :D
